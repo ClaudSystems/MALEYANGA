@@ -8,14 +8,9 @@ import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-# ⭐ CORREÇÃO: .parent.parent.parent para apontar para MALEYANGA/
-# BASE_DIR = Path(__file__).resolve().parent.parent.parent
-# ⭐ CORREÇÃO DEFINITIVA - Adicione no settings.py:
-# ⭐ CORREÇÃO DEFINITIVA - Use caminho absoluto
-# ⭐ USE ESTE CAMINHO ABSOLUTO NO settings.py:
 BASE_DIR = Path(__file__).resolve().parent.parent  # backend/
 
-# ⭐ Verificação de caminho (pode remover depois)
+# Verificação de caminho (pode remover depois)
 print(f"⭐ DEBUG: BASE_DIR = {BASE_DIR}")
 print(f"⭐ DEBUG: Templates path = {BASE_DIR / 'templates'}")
 
@@ -32,9 +27,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',  # Apenas uma vez
+    'rest_framework_simplejwt',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ]
+}
+
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # Deve vir primeiro
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -46,7 +57,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'MALEYANGA.urls'
 
-# ⭐ CONFIGURAÇÃO CORRIGIDA DOS TEMPLATES
+# Configuração dos TEMPLATES
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -54,9 +65,9 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.request',  # ⭐ DEVE ESTAR
-                'django.contrib.auth.context_processors.auth',  # ⭐ DEVE ESTAR
-                'django.contrib.messages.context_processors.messages',  # ⭐ DEVE ESTAR
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
@@ -68,7 +79,7 @@ WSGI_APPLICATION = 'MALEYANGA.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',  # ⭐ CORRETO: backend/db.sqlite3
+        'NAME': BASE_DIR / 'db.sqlite3',  # backend/db.sqlite3
     }
 }
 
@@ -94,12 +105,13 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# ⭐ Static files (CONFIGURAÇÃO CORRIGIDA)
+# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    BASE_DIR / '..' / 'static',  # ⭐ Agora aponta para MALEYANGA/static/
+    BASE_DIR / '..' / 'static',  # MALEYANGA/static/
 ]
-# ⭐ VERIFIQUE SE A PASTA STATIC EXISTE, SE NÃO, CRIE:
+
+# Verifique se a pasta static existe, se não, crie:
 static_dir = BASE_DIR / '..' / 'static'
 if not static_dir.exists():
     print(f"⭐ AVISO: Criando pasta static em {static_dir}")
@@ -110,29 +122,58 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# ⭐ Configuração Vite melhorada
+# Configuração Vite
 VITE_DEV_MODE = DEBUG
-# settings.py
-if DEBUG:
-    # Configurações de desenvolvimento
-    VITE_DEV_SERVER_URL = 'http://localhost:3000'
-    template_js = f'{VITE_DEV_SERVER_URL}/src/main.jsx'
-else:
-    # Configurações de produção
-    template_js = '/static/dist/assets/index-BfkMANgE.js'
 
 if VITE_DEV_MODE:
     VITE_DEV_SERVER_URL = 'http://localhost:3000'
-    # ⭐ CORS para desenvolvimento
-    INSTALLED_APPS += ['corsheaders']
-    MIDDLEWARE.insert(0, 'corsheaders.middleware.CorsMiddleware')
-    CORS_ALLOWED_ORIGINS = [
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ]
-    CSRF_TRUSTED_ORIGINS = [
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-    ]
+    template_js = f'{VITE_DEV_SERVER_URL}/src/main.jsx'
 else:
-    VITE_DEV_SERVER_URL = ''
+    template_js = '/static/dist/assets/index-BfkMANgE.js'
+
+# Configurações CORS e Cookies
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SECURE = False
+
+# Configurações de autenticação adicionais
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
+
+# Para desenvolvimento, desative algumas verificações de segurança
+if DEBUG:
+    # Permite acesso via IP
+    ALLOWED_HOSTS = ['*']
+
+    # Desativa algumas proteções para facilitar o desenvolvimento
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+else:
+    # Configurações de produção
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = 'Strict'
+    CSRF_COOKIE_SAMESITE = 'Strict'
+
+# Configurações de arquivos de mídia (se necessário)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+# Criar pasta media se não existir
+media_dir = BASE_DIR / 'media'
+if not media_dir.exists():
+    media_dir.mkdir(exist_ok=True)
+
+print("⭐ Configurações carregadas com sucesso!")
