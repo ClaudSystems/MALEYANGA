@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MALEYANGA - Django + React + Vite</title>
+
+    {% if debug %}
+        <!-- Desenvolvimento: Vite Dev Server -->
+        <script type="module" src="http://localhost:3000/src/main.jsx"></script>
+    {% else %}
+        <!-- Produção: Arquivos built -->
+        <link rel="stylesheet" href="/static/dist/assets/index-D8b4DHJx.css">
+        <script type="module" src="/static/dist/assets/index-BfkMANgE.js"></script>
+    {% endif %}
+</head>
+<body>
+<div id="root">
+    <!-- React será injetado aqui -->
+    <div style="padding: 20px; text-align: center;">
+        <h1>✅ Django Funcionando!</h1>
+        <p>Carregando React...</p>
+    </div>
+</div>
+</body>
+</html>
