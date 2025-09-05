@@ -3,10 +3,10 @@ from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
 from django.views import View
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+
 import json
 
 @method_decorator(csrf_exempt, name='dispatch')
@@ -143,3 +143,11 @@ def api_login(request):
         'status': 'error',
         'message': 'Método não permitido'
     }, status=405)
+@login_required
+def home_page(request):
+    """
+    Renderiza a homepage principal.
+    A interface de utilizador é gerida pelo React,
+    que será carregado através do template.
+    """
+    return render(request, 'home.html')
