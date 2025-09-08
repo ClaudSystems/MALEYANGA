@@ -33,8 +33,27 @@ const ClientesPage = () => {
 
     // Abre o formulário para novo cliente
     const handleNovoCliente = () => {
-        setEditingCliente(null);
         setFormErrors(null); // Limpa erros ao abrir novo formulário
+
+        // Gera um código único de 4 dígitos para o novo cliente
+        let novoCodigo;
+        let isUnique = false;
+        while (!isUnique) {
+            // Gera um número aleatório de 1000 a 9999
+            novoCodigo = Math.floor(1000 + Math.random() * 9000).toString();
+            // Verifica se o código já existe na lista de clientes
+            const codigoExistente = clientes.some(c => c.codigo === novoCodigo);
+            if (!codigoExistente) {
+                isUnique = true;
+            }
+        }
+
+        // Define o estado de edição com o novo código
+        setEditingCliente({
+            codigo: novoCodigo,
+            // O ClienteForm já lida com os campos vazios, então você só precisa do 'codigo'.
+        });
+        
         setShowForm(true);
     };
 
@@ -58,7 +77,7 @@ const ClientesPage = () => {
                 return;
             }
 
-            if (editingCliente) {
+            if (editingCliente&& editingCliente.id) {
                 console.log('Editando cliente ID:', editingCliente.id);
                 const response = await api.put(`clientes/${editingCliente.id}/`, formData);
                 console.log('Resposta da edição:', response.data);

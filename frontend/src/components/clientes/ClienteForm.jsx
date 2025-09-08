@@ -330,6 +330,8 @@ const ClienteForm = ({ cliente, onSubmit, onCancel, onClose, apiErrors }) => {
                                     onBlur={handleBlur}
                                     error={errors.codigo}
                                     placeholder="Código único do cliente"
+                                    readOnly 
+
                                 />
                             </div>
 

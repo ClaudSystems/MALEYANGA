@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ClienteList = ({ clientes, onEditCliente, onDeleteCliente }) => {
+const ClienteList = ({ clientes, onEdit, onDelete }) => {
     if (clientes.length === 0) {
         return (
             <div className="p-6 text-center">
@@ -20,6 +20,8 @@ const ClienteList = ({ clientes, onEditCliente, onDeleteCliente }) => {
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                 <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Codigo</th>
+                    
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telefone</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
@@ -30,6 +32,9 @@ const ClienteList = ({ clientes, onEditCliente, onDeleteCliente }) => {
                 <tbody className="bg-white divide-y divide-gray-200">
                 {clientes.map((cliente) => (
                     <tr key={cliente.id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                            <div className="text-sm font-medium text-gray-900">{cliente.codigo}</div>
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm font-medium text-gray-900">{cliente.nome}</div>
                         </td>
@@ -44,13 +49,13 @@ const ClienteList = ({ clientes, onEditCliente, onDeleteCliente }) => {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <button
-                                onClick={() => onEditCliente(cliente)}
+                                onClick={() => onEdit(cliente)}
                                 className="text-blue-600 hover:text-blue-900 mr-4"
                             >
                                 Editar
                             </button>
                             <button
-                                onClick={() => onDeleteCliente(cliente.id)}
+                                onClick={() => onDelete(cliente.id)}
                                 className="text-red-600 hover:text-red-900"
                             >
                                 Excluir
