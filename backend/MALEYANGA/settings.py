@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Django settings for MALEYANGA project.
 
@@ -11,8 +12,8 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent  # backend/
 
 # Verificação de caminho (pode remover depois)
-print(f"⭐ DEBUG: BASE_DIR = {BASE_DIR}")
-print(f"⭐ DEBUG: Templates path = {BASE_DIR / 'templates'}")
+print(f"DEBUG: BASE_DIR = {BASE_DIR}")
+print(f"DEBUG: Templates path = {BASE_DIR / 'templates'}")
 
 # Quick-start development settings - unsuitable for production
 SECRET_KEY = 'django-insecure-u)ajw51ed!%8c^$n$odr#j(=8-(5b_x03c!cn4xmn&cl&j=1ur'
@@ -31,6 +32,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',  # Apenas uma vez
     'rest_framework_simplejwt',
+    'clientes',
 ]
 
 REST_FRAMEWORK = {
@@ -75,11 +77,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'MALEYANGA.wsgi.application'
 
-# Database
+# Usando a base de dados padrão SQLite
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',  # backend/db.sqlite3
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -114,7 +116,7 @@ STATICFILES_DIRS = [
 # Verifique se a pasta static existe, se não, crie:
 static_dir = BASE_DIR / '..' / 'static'
 if not static_dir.exists():
-    print(f"⭐ AVISO: Criando pasta static em {static_dir}")
+    print(f"AVISO: Criando pasta static em {static_dir}")
     static_dir.mkdir(exist_ok=True)
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -176,4 +178,4 @@ media_dir = BASE_DIR / 'media'
 if not media_dir.exists():
     media_dir.mkdir(exist_ok=True)
 
-print("⭐ Configurações carregadas com sucesso!")
+print("Configurações carregadas com sucesso!")

@@ -6,7 +6,7 @@ import logoImage from './assets/images/logo.png';
 
 const Dashboard = () => {
     const navigate = useNavigate();
-    const userName = "João Silva"; // Você pode obter isso do seu estado ou contexto
+    const userName = "João Silva";
 
     const handleLogout = () => {
         localStorage.removeItem('access_token');
@@ -35,19 +35,16 @@ const Dashboard = () => {
         },
     ];
 
+    const handleMenuClick = (url) => {
+        navigate(url);
+    };
+
     return (
         <div className="dashboard-container">
-            {/* Barra de navegação melhorada */}
             <header className="navbar">
                 <div className="logo-section">
-
                     <img src={logoImage} alt="Logo" className="logo-img"/>
-
-                </div>
-                <div className="logo-section">
                     <div className="logo">Gestão de Crédito e Contabilidade</div>
-
-
                 </div>
                 <div className="user-info">
                     <div className="user-details">
@@ -72,14 +69,14 @@ const Dashboard = () => {
 
                 <div className="menu-grid">
                     {menus.map((menu, index) => (
-                        <div key={index} className="menu-card">
+                        <div key={index} className="menu-card" onClick={() => handleMenuClick(menu.url)}>
                             <div className="card-icon">{menu.icon}</div>
                             <h3>{menu.nome}</h3>
                             <p>{menu.descricao}</p>
-                            <a href={menu.url} className="btn">
+                            <div className="btn">
                                 Acessar
                                 <span className="btn-arrow">→</span>
-                            </a>
+                            </div>
                         </div>
                     ))}
                 </div>

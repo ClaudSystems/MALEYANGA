@@ -28,15 +28,17 @@ const Login = () => {
             if (response.ok) {
                 const data = await response.json();
 
-                // ⭐ Salva o token de acesso no Local Storage
-                localStorage.setItem('access_token', data.access);
+                // Limpa tokens antigos
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('refresh_token');
 
-                // ⭐ Opcional: Salva o token de refresh para renovação futura
+                // Salva os novos tokens
+                localStorage.setItem('access_token', data.access);
                 localStorage.setItem('refresh_token', data.refresh);
 
                 setMessage('✅ Login bem-sucedido!');
 
-                // ⭐ Redireciona o usuário para a página principal
+                // Redireciona o usuário para a página principal
                 navigate('/');
 
             } else {

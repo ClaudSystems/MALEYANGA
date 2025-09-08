@@ -9,6 +9,7 @@ from django.utils.decorators import method_decorator
 
 import json
 
+
 @method_decorator(csrf_exempt, name='dispatch')
 class LoginAPI(View):
     def post(self, request):
@@ -47,6 +48,7 @@ class LoginAPI(View):
                 'message': 'Server error: ' + str(e)
             }, status=500)
 
+
 @method_decorator(csrf_exempt, name='dispatch')
 class LogoutAPI(View):
     def post(self, request):
@@ -61,6 +63,7 @@ class LogoutAPI(View):
                 'success': False,
                 'message': 'Server error: ' + str(e)
             }, status=500)
+
 
 @method_decorator(csrf_exempt, name='dispatch')
 class CheckAuthAPI(View):
@@ -80,13 +83,16 @@ class CheckAuthAPI(View):
                 'message': 'User not authenticated'
             })
 
+
 def index(request):
     context = {
         'debug': settings.DEBUG,
-        'vite_dev_server_url': settings.VITE_DEV_SERVER_URL if hasattr(settings, 'VITE_DEV_SERVER_URL') and settings.DEBUG else '',
+        'vite_dev_server_url': settings.VITE_DEV_SERVER_URL if hasattr(settings,
+                                                                       'VITE_DEV_SERVER_URL') and settings.DEBUG else '',
         'vite_dev_mode': settings.DEBUG
     }
     return render(request, 'base.html', context)
+
 
 # View protegida de exemplo
 @login_required
@@ -98,6 +104,7 @@ def protected_view(request):
             'username': request.user.username
         }
     })
+
 
 # API view usando decorators do REST framework
 @csrf_exempt
@@ -143,6 +150,8 @@ def api_login(request):
         'status': 'error',
         'message': 'Método não permitido'
     }, status=405)
+
+
 @login_required
 def home_page(request):
     """
@@ -151,3 +160,13 @@ def home_page(request):
     que será carregado através do template.
     """
     return render(request, 'home.html')
+
+
+@login_required
+def clientes_page(request):
+    """
+    Renderiza a pagina de gestão de clientes.
+    A interface de utilizador é gerida pelo React,
+    que será carregado através do template.
+    """
+    return render(request, 'clientes.html')

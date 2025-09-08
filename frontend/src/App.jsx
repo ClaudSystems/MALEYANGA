@@ -8,6 +8,7 @@ import Login from './Login';
 
 // Importa o componente do dashboard (a nossa nova homepage profissional)
 import Dashboard from './Dashboard';
+import ClientesPage from './pages/ClientesPage'; // Importa a página de clientes
 
 import './App.css';
 
@@ -35,6 +36,16 @@ function App() {
                     element={
                         <PrivateRoute>
                             <Dashboard />
+                        </PrivateRoute>
+                    }
+                />
+
+                {/* Rota Protegida para Clientes */}
+                <Route
+                    path="/clientes"
+                    element={
+                        <PrivateRoute>
+                            <ClientesPage />
                         </PrivateRoute>
                     }
                 />
