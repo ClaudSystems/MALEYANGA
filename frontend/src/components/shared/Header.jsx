@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Header = ({ onMenuClick }) => {
+const Header = ({ onMenuClick, pageTitle }) => {
     return (
         <header className="bg-white shadow-sm border-b">
             <div className="flex items-center justify-between p-4">
@@ -11,9 +11,14 @@ const Header = ({ onMenuClick }) => {
                     >
                         ☰
                     </button>
-                    <h1 className="ml-2 text-xl font-semibold text-gray-800">
-                        Sistema de Gestão
-                    </h1>
+                    
+                    {/* Logo + Título */}
+                    <div className="flex items-center ml-2">
+                     
+                        <h1 className="text-xl font-semibold text-gray-800">
+                            {pageTitle || 'MALEYANGA'}
+                        </h1>
+                    </div>
                 </div>
 
                 <div className="flex items-center space-x-4">

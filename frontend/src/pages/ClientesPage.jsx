@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import ClienteForm from '../components/clientes/ClienteForm';
 import ClienteList from '../components/clientes/ClienteList';
 import api from '../services/api';
+import Sidebar from '../components/shared/Sidebar';
 
 const ClientesPage = () => {
+
     const [showForm, setShowForm] = useState(false);
     const [editingCliente, setEditingCliente] = useState(null);
     const [clientes, setClientes] = useState([]);
@@ -134,7 +136,9 @@ const ClientesPage = () => {
     };
 
     return (
+        
         <div className="p-6 max-w-6xl mx-auto">
+            
             <div className="flex justify-between items-center mb-6">
                 <h1 className="text-2xl font-bold text-gray-800">📋 Lista de clientes</h1>
                 <button

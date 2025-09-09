@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import Notification from './Notification';
@@ -11,6 +11,19 @@ const Layout = () => {
         message: '',
         type: ''
     });
+    const location = useLocation();
+
+    // Função para obter o título da página baseado na rota
+    const getPageTitle = () => {
+        const routeTitles = {
+            '/dashboard': '📊 Dashboard',
+            '/clientes': '👥 Gestão de Clientes',
+            '/assinantes': '📝 Assinantes',
+            '/': '📊 Dashboard'
+        };
+        
+        return routeTitles[location.pathname] || 'Sistema de Gestão';
+    };
 
     const showNotification = (message, type = 'success') => {
         setNotification({ show: true, message, type });
@@ -27,8 +40,11 @@ const Layout = () => {
 
             {/* Conteúdo principal */}
             <div className="flex-1 flex flex-col overflow-hidden">
-                {/* Header */}
-                <Header onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+                {/* Header com título dinâmico */}
+                <Header 
+                    onMenuClick={() => setSidebarOpen(!sidebarOpen)}
+                    pageTitle={getPageTitle()}
+                />
 
                 {/* Conteúdo da página */}
                 <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100">

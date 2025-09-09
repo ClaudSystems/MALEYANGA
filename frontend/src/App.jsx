@@ -1,28 +1,19 @@
 // src/App.jsx
-
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-
-// Importa o componente de login
 import Login from './Login';
-
-// Importa o componente do dashboard (a nossa nova homepage profissional)
 import Dashboard from './Dashboard';
-import ClientesPage from './pages/ClientesPage'; // Importa a página de clientes
-
+import ClientesPage from './pages/ClientesPage';
+import Layout from './components/shared/Layout'; // Importe o Layout
 import './App.css';
 
 // Componente para a Rota Protegida
 const PrivateRoute = ({ children }) => {
-    // Verifica se existe um token de acesso no localStorage
     const token = localStorage.getItem('access_token');
-
-    // Se o token existir, permite o acesso aos "children" (o componente Dashboard)
-    // Se não existir, redireciona o utilizador para a página de login
     return token ? children : <Navigate to="/login" replace />;
 };
 
-// Componente principal da aplicação que configura as rotas
+// Componente principal da aplicação
 function App() {
     return (
         <BrowserRouter>
@@ -30,25 +21,24 @@ function App() {
                 {/* Rota de Login (pública) */}
                 <Route path="/login" element={<Login />} />
 
-                {/* Rota Protegida: / */}
+                {/* Rotas Protegidas com Layout */}
                 <Route
                     path="/"
                     element={
                         <PrivateRoute>
-                            <Dashboard />
+                            <Layout />
                         </PrivateRoute>
                     }
-                />
+                >
+                    {/* Rotas filhas que serão renderizadas no Outlet do Layout */}
+                    <Route index element={<Dashboard />} />
+                    <Route path="dashboard" element={<Dashboard />} />
+                    <Route path="clientes" element={<ClientesPage />} />
+                    <Route path="assinantes" element={<div>Página de Assinantes</div>} />
+                </Route>
 
-                {/* Rota Protegida para Clientes */}
-                <Route
-                    path="/clientes"
-                    element={
-                        <PrivateRoute>
-                            <ClientesPage />
-                        </PrivateRoute>
-                    }
-                />
+                {/* Rota fallback para páginas não encontradas */}
+                <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
         </BrowserRouter>
     );

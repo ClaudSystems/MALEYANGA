@@ -29,9 +29,23 @@ const Sidebar = ({ isOpen, onClose }) => {
                 lg:static lg:translate-x-0
                 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>
-                <div className="flex items-center justify-between p-4 border-b border-blue-800">
-                    <h1 className="text-xl font-semibold">MALEYANGA</h1>
-                    <button onClick={onClose} className="lg:hidden">
+                <div className="flex flex-col items-center justify-center p-4 border-b border-blue-800">
+                    {/* Logo no topo de tudo */}
+                    <img 
+                        src="/src/assets/images/logo.png" 
+                        alt="Logo MALEYANGA" 
+                        className="h-16 w-16 mb-2" // Tamanho maior para destaque
+                        onError={(e) => {
+                            // Fallback se a imagem não carregar
+                            e.target.style.display = 'none';
+                            // Mostra texto alternativo
+                            const fallback = document.createElement('h1');
+                            fallback.className = 'text-xl font-semibold';
+                            fallback.textContent = 'MALEYANGA';
+                            e.target.parentNode.appendChild(fallback);
+                        }}
+                    />
+                    <button onClick={onClose} className="lg:hidden absolute top-4 right-4">
                         ✕
                     </button>
                 </div>
