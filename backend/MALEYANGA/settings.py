@@ -33,6 +33,8 @@ INSTALLED_APPS = [
     'corsheaders',  # Apenas uma vez
     'rest_framework_simplejwt',
     'clientes',
+    'creditos',
+    'feriados',
 ]
 
 REST_FRAMEWORK = {
