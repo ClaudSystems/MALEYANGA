@@ -1,6 +1,25 @@
 import React from 'react';
 
 const ClienteList = ({ clientes, onEdit, onDelete }) => {
+    // Verificação de segurança - se clientes não for array ou for null/undefined
+    if (!clientes || !Array.isArray(clientes)) {
+        console.error('Erro: clientes não é um array:', clientes);
+        return (
+            <div className="p-6 text-center bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div className="text-yellow-600 mb-4">
+                    <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <h3 className="text-lg font-medium text-yellow-800 mb-2">Erro ao carregar clientes</h3>
+                <p className="text-yellow-600">Os dados dos clientes estão em formato inválido.</p>
+                <p className="text-sm text-yellow-500 mt-2">
+                    Por favor, recarregue a página ou entre em contato com o suporte.
+                </p>
+            </div>
+        );
+    }
+
     if (clientes.length === 0) {
         return (
             <div className="p-6 text-center">
@@ -21,7 +40,6 @@ const ClienteList = ({ clientes, onEdit, onDelete }) => {
                 <thead className="bg-gray-50">
                 <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Codigo</th>
-                    
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nome</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Telefone</th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>

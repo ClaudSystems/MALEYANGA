@@ -1,14 +1,29 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
+// Sistema de rota automática - adicione novas páginas aqui
+const appRoutes = {
+  '/dashboard': { label: 'Dashboard', icon: '📊', category: 'main' },
+  '/clientes': { label: 'Clientes', icon: '👥', category: 'main' },
+  '/creditos': { label: 'Créditos', icon: '💰', category: 'main' },
+  '/assinantes': { label: 'Assinantes', icon: '📝', category: 'main' },
+  '/pagamentos': { label: 'Pagamentos', icon: '💳', category: 'financeiro' },
+  '/relatorios': { label: 'Relatórios', icon: '📈', category: 'financeiro' },
+  // Adicione novas rotas aqui automaticamente
+};
+
 const Sidebar = ({ isOpen, onClose }) => {
     const location = useLocation();
 
-    const menuItems = [
-        { path: '/dashboard', label: 'Dashboard', icon: '📊' },
-        { path: '/clientes', label: 'Clientes', icon: '👥' },
-        { path: '/assinantes', label: 'Assinantes', icon: '📝' },
-    ];
+    // Agrupar rotas por categoria
+    const groupedRoutes = Object.entries(appRoutes).reduce((acc, [path, data]) => {
+        const category = data.category || 'outros';
+        if (!acc[category]) {
+            acc[category] = [];
+        }
+        acc[category].push({ path, ...data });
+        return acc;
+    }, {});
 
     const isActive = (path) => location.pathname === path;
 
@@ -30,15 +45,12 @@ const Sidebar = ({ isOpen, onClose }) => {
                 ${isOpen ? 'translate-x-0' : '-translate-x-full'}
             `}>
                 <div className="flex flex-col items-center justify-center p-4 border-b border-blue-800">
-                    {/* Logo no topo de tudo */}
                     <img 
                         src="/src/assets/images/logo.png" 
                         alt="Logo MALEYANGA" 
-                        className="h-16 w-16 mb-2" // Tamanho maior para destaque
+                        className="h-16 w-16 mb-2"
                         onError={(e) => {
-                            // Fallback se a imagem não carregar
                             e.target.style.display = 'none';
-                            // Mostra texto alternativo
                             const fallback = document.createElement('h1');
                             fallback.className = 'text-xl font-semibold';
                             fallback.textContent = 'MALEYANGA';
@@ -51,26 +63,65 @@ const Sidebar = ({ isOpen, onClose }) => {
                 </div>
 
                 <nav className="p-4">
-                    <ul className="space-y-2">
-                        {menuItems.map((item) => (
-                            <li key={item.path}>
-                                <Link
-                                    to={item.path}
-                                    className={`
-                                        flex items-center p-3 rounded-lg transition-colors
-                                        ${isActive(item.path)
-                                        ? 'bg-blue-800 text-white'
-                                        : 'text-blue-200 hover:bg-blue-800 hover:text-white'
-                                    }
-                                    `}
-                                    onClick={onClose}
-                                >
-                                    <span className="mr-3">{item.icon}</span>
-                                    <span>{item.label}</span>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
+                    {/* Menu Principal */}
+                    <div className="mb-6">
+                        <h3 className="text-blue-400 text-xs uppercase font-semibold mb-3 pl-3">
+                            Principal
+                        </h3>
+                        <ul className="space-y-2">
+                            {groupedRoutes.main?.map((item) => (
+                                <li key={item.path}>
+                                    <Link
+                                        to={item.path}
+                                        className={`
+                                            flex items-center p-3 rounded-lg transition-colors
+                                            ${isActive(item.path)
+                                            ? 'bg-blue-800 text-white'
+                                            : 'text-blue-200 hover:bg-blue-800 hover:text-white'
+                                        }
+                                        `}
+                                        onClick={onClose}
+                                    >
+                                        <span className="mr-3">{item.icon}</span>
+                                        <span>{item.label}</span>
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    {/* Outras Categorias */}
+                    {Object.entries(groupedRoutes).map(([category, routes]) => {
+                        if (category === 'main') return null;
+                        
+                        return (
+                            <div key={category} className="mb-6">
+                                <h3 className="text-blue-400 text-xs uppercase font-semibold mb-3 pl-3">
+                                    {category.charAt(0).toUpperCase() + category.slice(1)}
+                                </h3>
+                                <ul className="space-y-2">
+                                    {routes.map((item) => (
+                                        <li key={item.path}>
+                                            <Link
+                                                to={item.path}
+                                                className={`
+                                                    flex items-center p-3 rounded-lg transition-colors
+                                                    ${isActive(item.path)
+                                                    ? 'bg-blue-800 text-white'
+                                                    : 'text-blue-200 hover:bg-blue-800 hover:text-white'
+                                                }
+                                                `}
+                                                onClick={onClose}
+                                            >
+                                                <span className="mr-3">{item.icon}</span>
+                                                <span>{item.label}</span>
+                                            </Link>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        );
+                    })}
 
                     {/* Logout */}
                     <div className="mt-8 pt-4 border-t border-blue-800">

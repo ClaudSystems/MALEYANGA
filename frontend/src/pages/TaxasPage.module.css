@@ -1,0 +1,32 @@
+.container {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.table {
+  min-width: 650px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .container {
+    padding: 16px;
+  }
+}

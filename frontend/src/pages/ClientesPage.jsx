@@ -17,7 +17,7 @@ const ClientesPage = () => {
     const loadClientes = async () => {
         try {
             console.log('Carregando clientes...');
-            const response = await api.get('clientes/');
+             const response = await api.get('clientes/clientes/');
             console.log('Clientes carregados:', response.data);
             setClientes(response.data);
             setLoading(false);

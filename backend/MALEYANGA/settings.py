@@ -20,7 +20,7 @@ SECRET_KEY = 'django-insecure-u)ajw51ed!%8c^$n$odr#j(=8-(5b_x03c!cn4xmn&cl&j=1ur
 DEBUG = True
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 
-# Application definition
+# Application definition - ORDEM CORRIGIDA
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -28,16 +28,25 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_filters',  # ⭐ DEVE VIR ANTES do rest_framework
     'rest_framework',
     'rest_framework.authtoken',
-    'corsheaders',  # Apenas uma vez
+    'corsheaders',
     'rest_framework_simplejwt',
     'clientes',
     'creditos',
     'feriados',
+    'taxas',
+    'DefinicaoDeCredito',
 ]
 
+# CONFIGURAÇÃO DO REST FRAMEWORK CORRIGIDA
 REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',  # ⭐ CORRIGIDO
+        'rest_framework.filters.SearchFilter',
+        'rest_framework.filters.OrderingFilter',
+    ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
@@ -45,7 +54,10 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    ]
+    ],
+    # ⭐ ADICIONE PARA DESATIVAR PAGINAÇÃO (se necessário)
+    'DEFAULT_PAGINATION_CLASS': None,
+    'PAGE_SIZE': None
 }
 
 MIDDLEWARE = [
@@ -181,3 +193,48 @@ if not media_dir.exists():
     media_dir.mkdir(exist_ok=True)
 
 print("Configurações carregadas com sucesso!")
+# Configuração de logging detalhada
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'debug.log',
+            'formatter': 'verbose',
+        },
+    },
+    'root': {
+        'handlers': ['console', 'file'],
+        'level': 'DEBUG',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'taxas': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}
